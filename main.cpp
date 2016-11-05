@@ -1,35 +1,36 @@
 #include <iostream>
-#include <string>
 #include <iomanip>
-#include <pcap.h>
+#include <tins/tins.h>
 using namespace std;
-#define pcap_src_if_string "rpcap://"
-#define BUFSIZ 65536
+using namespace Tins;
+
+struct packet{
+    void snf_set(){
+        SnifferConfiguration config;
+        config.set_promisc_mode(true);
+        config.set_filter("tcp");
+        Sniffer sniffer("eth0", config);
+        sniffer.sniff_loop(make_sniffer_handler(this, &packet::handle));
+    }
+    bool handle(PDU& pdu){
+        const EthernetII &eth = pdu.rfind_pdu<EthernetII>();
+        const IP &ip = pdu.rfind_pdu<IP>();
+        const TCP &tcp = pdu.rfind_pdu<TCP>();
+        const RawPDU &rp = pdu.rfind_pdu<RawPDU>();
+        if(!false){
+            print(eth, ip, tcp);
+        }
+        return true;
+    }
+    void print(EthernetII eth, IP ip, TCP tcp){
+        cout<<"Packet Start\n";
+        cout<<"Src : "<<hex<<eth.src_addr()<<setw(5)<<dec<<ip.src_addr()<<"\n";
+        cout<<"Dst : "<<hex<<eth.dst_addr()<<setw(5)<<dec<<ip.dst_addr()<<"\n";
+        cout<<"Packet End\n";
+    }
+};
+
 int main(int argc, char **argv){
-    pcap_t *handle;
-    char *dev, *net, *mask;
-    int ret = 0, i = 0, inum = 0, num = 0;
-    pcap_if_t *alldevs, *d;
-    char errbuf[PCAP_ERRBUF_SIZE];
-    bpf_u_int32 netp, maskp;
-    //struct in_addr addr;
-
-    ret = pcap_findalldevs(&alldevs, errbuf);
-
-    if (ret == -1) {
-            printf("pcap_findalldevs: %s\n", errbuf);
-            exit(1);
-    }
-    for (d = alldevs; d; d = d->next) {
-        printf("%d. %s\n    ", ++i, d->name);
-        if (d->description)	printf(" (%s)\n", d->description);
-        else printf(" (no description available)\n");
-    }
-    cout << "select number : ";
-    cin >> num;
-    for (d = alldevs, i = 0; i < num - 1; d = d->next, i++);
-    if ((handle = pcap_open_live(d->name, BUFSIZ, 0, 1, errbuf)) == NULL) {	//장치이름, 패킷캡쳐부분, promiscuous mode, 시간, 에러버퍼
-        fprintf(stderr, "Couldn't open device %s: %s\n", d->name, errbuf);
-        return(2);
-    }
+    packet pk;
+    pk.snf_set();
 }
