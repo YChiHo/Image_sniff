@@ -11,4 +11,8 @@ LIBS += -ltins
 LIBS += -lpthread
 TEMPLATE = app
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    http_parser.cpp
+
+HEADERS += \
+    http_parser.h
