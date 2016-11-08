@@ -8,13 +8,18 @@
 using namespace std;
 using namespace Tins;
 
-class Get_Request_Line{
+class Request_Line{
 public:
-    int cnt;
-    string Get;
-    string Path;
-    string Version;
+    string method;
+    string path;
+    string version;
+    string Lines[10];
+    string domain;
 public:
-    Get_Request_Line(string request);
-    void Request_clear();
+    Request_Line(); //init
+    string Get_Line(string request); //Line get
+    void request_line_parser(string line);
+    bool request_option();
+    void Request(string request);
+    string request_Lines();
 };

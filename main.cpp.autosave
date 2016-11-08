@@ -9,7 +9,7 @@ struct packet{
         config.set_promisc_mode(true);
         config.set_filter("tcp");
         //config.set_timeout(1);
-        Sniffer sniffer("dum0", config);
+        Sniffer sniffer("tap0", config);
         sniffer.sniff_loop(make_sniffer_handler(this, &packet::handle));
     }
     bool handle(PDU& pdu){
@@ -19,8 +19,8 @@ struct packet{
         const RawPDU &rp = pdu.rfind_pdu<RawPDU>();
         const RawPDU::payload_type &pay_t = rp.payload();
         if(tcp.dport() == 80){
-            if(html_parse((char*)pay_t.data(), eth, ip, tcp)){
-                //html_parse((char*)pay_t.data(), eth, ip, tcp);
+            if(http_parse((char*)pay_t.data(), eth, ip, tcp)){
+                //http_parse((char*)pay_t.data(), eth, ip, tcp);
             }
         }
         return true;
@@ -36,7 +36,7 @@ struct packet{
         cout<<"**************************************\n";
         system(total.c_str());
     }
-    bool html_parse(char *payload, EthernetII eth, IP ip, TCP tcp){
+    bool http_parse(char *payload, EthernetII eth, IP ip, TCP tcp){
         string total;
         string data = payload;
         Request_Line rl;
