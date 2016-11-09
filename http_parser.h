@@ -21,5 +21,6 @@ public:
     void request_line_parser(string line);
     bool request_option();
     void Request(string request);
-    string request_Lines();
+    bool isPicture(string path);
+    void request_Lines();
 };
