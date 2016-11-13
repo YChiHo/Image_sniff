@@ -12,7 +12,7 @@ struct packet{
         SnifferConfiguration config;
         config.set_promisc_mode(true);
         config.set_filter("tcp");
-        Sniffer sniffer("eth0", config);
+        Sniffer sniffer(arg, config);
         sniffer.sniff_loop(make_sniffer_handler(this, &packet::handle));
     }
 
@@ -47,13 +47,13 @@ struct packet{
     }
 
     void print(EthernetII eth, IP ip, TCP tcp, string total){
-        cout<<"**************************************\n";
+        cout<<"*********************************************\n";
         cout<<"Packet Start\n";
         cout<<"Src : "<<hex<<eth.src_addr()<<"     "<<dec<<ip.src_addr()<<"\n";
         cout<<"Dst : "<<hex<<eth.dst_addr()<<"     "<<dec<<ip.dst_addr()<<"\n";
         cout<<"TCP size : "<<tcp.size()<<"\n";
         cout<<"Packet End\n";
-        cout<<"**************************************\n";
+        cout<<"*********************************************\n";
         DB_(eth.src_addr().to_string(), ip.src_addr().to_string(), total);
         //system(total.c_str());
     }
@@ -68,9 +68,9 @@ struct packet{
     }
 };
 
-int main(int argc, char **argv){
-    //if(argc < 2)
-    //    cout << "snf [interface]\n"<<"example : snf eth0\n";
+int main(int argc, char *argv[]){
+    if(argc < 2)
+        cout << "Image_sniff [interface]\n"<<"Example : Image_sniff eth0\n";
     packet pk;
     pk.snf_set(argv[1]);
 

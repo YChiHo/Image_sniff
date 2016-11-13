@@ -19,8 +19,10 @@ void DB::DB_set(){
         exit(1);
     }
     else cout<<"USE wfa\n";
-    if(!mysql_query(&mysql, "select count(*) cnt from informaition_schema.table where table_schema='wfa' and table_name='info'")){
-        cout << "Create info table\n";
+    if(mysql_query(&mysql, "select count(*) cnt from informaition_schema.table where table_schema='wfa' and table_name='info'")){
+        if(!mysql_query(&mysql, "create table info(year int not null, mon int not null,day int not null, hour int not null, min int not null, sec int not null, src_ip int not null, src_mac varchar(17) not null, dl varchar(200) not null PRIMARY KEY)")){
+            cout<<"Create Table Success\n";
+        }
     }
 }
 
