@@ -1,16 +1,22 @@
 #include"http_parser.h"
-
+#include"db.h"
+#include<time.h>
 using namespace std;
 using namespace Tins;
-string save_path = "wget -P /tmp/picture ";
+string save_path = "wget -P /root/Documents/pic ";
+
+struct tm *c_time(const time_t timer);
+
 struct packet{
-    void snf_set(){
+
+    void snf_set(char *arg){
         SnifferConfiguration config;
         config.set_promisc_mode(true);
         config.set_filter("tcp");
-        Sniffer sniffer("dum0", config);
+        Sniffer sniffer("eth0", config);
         sniffer.sniff_loop(make_sniffer_handler(this, &packet::handle));
     }
+
     bool handle(PDU& pdu){
         const EthernetII &eth = pdu.rfind_pdu<EthernetII>();
         const IP &ip = pdu.rfind_pdu<IP>();
@@ -21,6 +27,7 @@ struct packet{
             http_parse((char*)pay_t.data(), eth, ip, tcp);
         return true;
     }
+
     void print(EthernetII eth, IP ip, TCP tcp, string total){
         cout<<"**************************************\n";
         cout<<"Packet Start\n";
@@ -30,7 +37,9 @@ struct packet{
         system(total.c_str());
         cout<<"Packet End\n";
         cout<<"**************************************\n";
+        DB_send();
     }
+
     bool http_parse(char *payload, EthernetII eth, IP ip, TCP tcp){
         string total;
         string data = payload;
@@ -50,9 +59,16 @@ struct packet{
         return true;
     }
 
+    void DB_send(){
+        DB db;
+        DB();
+        db.DB_set();
+    }
 };
 
 int main(int argc, char **argv){
+    //if(argc < 2)
+    //    cout << "snf [interface]\n"<<"example : snf eth0\n";
     packet pk;
-    pk.snf_set();
+    pk.snf_set(argv[1]);
 }

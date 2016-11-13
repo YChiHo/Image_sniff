@@ -1,7 +1,4 @@
 #include "http_parser.h"
-#include <string>
-#include <iostream>
-#include <tins/tins.h>
 
 Request_Line::Request_Line(){
     method.clear();
@@ -54,10 +51,9 @@ bool Request_Line::request_option(){
             method == "HEAD "  ||
             method == "PUT "   ||
             method == "DELETE "||
-            method == "TRACE "  ){
+            method == "TRACE "  )
         return true;
-    }
-    else false;
+    else return false;
 }
 
 void Request_Line::Request(string request){
