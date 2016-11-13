@@ -17,6 +17,5 @@ public:
     DB();
     void DB_set();
     void DB_insert(int year, int mon, int day, int hour, int min, int sec, string eth, string ip, string total);
-    void DB_loaddata();
     void DB_Close();
 };

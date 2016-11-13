@@ -59,6 +59,7 @@ struct packet{
     }
 
     void DB_(string eth, string ip, string total){
+        time(&time_);
         c_time = localtime(&time_);
         DB db;
         DB();
@@ -70,7 +71,6 @@ struct packet{
 int main(int argc, char **argv){
     //if(argc < 2)
     //    cout << "snf [interface]\n"<<"example : snf eth0\n";
-    time(&time_);
     packet pk;
     pk.snf_set(argv[1]);
 
