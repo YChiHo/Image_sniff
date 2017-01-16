@@ -13,6 +13,10 @@ select{
 div{
     text-align:center;
 }
+img{
+    width:300px;
+    height:250px;
+}
 </style>
 <body>
 
@@ -97,7 +101,7 @@ echo"검색된 데이터 : $total 건";
         echo "<th>발생 시간</th>";
         echo "<th>IP</th>";
         echo "<th>MAC</th>";
-        echo "<th>경로</th>";
+        echo "<th>이미지</th>";
         echo "</tr>";
 
 if ($result->num_rows > 0) {
@@ -106,7 +110,7 @@ if ($result->num_rows > 0) {
         echo "<th>" .$row["year"]."." .$row["mon"]."." .$row["day"]." " .$row["hour"].":" .$row["min"].":" .$row["sec"]." " .$row[""]. "<br></th>";
         echo "<th>" .$row["src_ip"]."<br></th>";
         echo "<th>" .$row["src_mac"]."<br></th>";
-        echo "<th> <a href=http://" .$row['dl'].">".$row['dl']. "</a><br></th>";
+        echo "<th> <img src=http://" .$row['dl'].">". "<br></th>";
         echo "</tr>";
     }
 } else echo "No such database";
