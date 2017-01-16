@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <style>
 table, th, td{
@@ -19,7 +19,7 @@ div{
 <div class="99">
 <h1><font align="center" face="Verdana" color = black> Wi-Fi Analysis </font></h1>
 <br>
-<form method="POST" action = "index.php">
+<form method="POST" action = "index1.php">
 <script language="javascript">
 function setValues(){
 	var sel = document.getElementById("select1");
@@ -53,7 +53,7 @@ function setValues(){
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "qhdksakstktjd";
+$password = "1q2w3e4r!@";
 $dbname = "wfa";
 $select_box = $_POST['select1'];   //select
 $values = $_POST['search_data']; //text_box
@@ -72,7 +72,7 @@ if($select_box != NULL && $values != NULL) {
     $page_num = ceil($total/$posts_num);
     $page_start = $posts_num * $page_seq;
 
-    $sql = "SELECT * FROM info where $select_box='$values' limit $page_start, $posts_num";
+    $sql = "SELECT * FROM info where $select_box='$values' order by min desc limit $page_start, $posts_num";
 
     $result2 = $conn->query($sql);
     $total = $result2->num_rows; //전체 수
@@ -84,7 +84,7 @@ else {
     $page_num = ceil($total/$posts_num); // 167/15 = 12
     $page_start = $posts_num * $page_seq; // 12*10 = 120
 
-    $sql = "SELECT * FROM info limit $page_start, $posts_num"; //sql save
+    $sql = "SELECT * FROM info  order by min desc limit $page_start, $posts_num"; //sql save
 }
 $result = $conn->query($sql); //query result
 
@@ -106,7 +106,7 @@ if ($result->num_rows > 0) {
         echo "<th>" .$row["year"]."." .$row["mon"]."." .$row["day"]." " .$row["hour"].":" .$row["min"].":" .$row["sec"]." " .$row[""]. "<br></th>";
         echo "<th>" .$row["src_ip"]."<br></th>";
         echo "<th>" .$row["src_mac"]."<br></th>";
-        echo "<th>" .$row["dl"]."<br></th>";
+        echo "<th> <a href=http://" .$row['dl'].">".$row['dl']. "</a><br></th>";
         echo "</tr>";
     }
 } else echo "No such database";
